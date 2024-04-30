@@ -6,11 +6,11 @@ Register parsers via the "aiida.parsers" entry point in setup.json.
 
 from aiida.common import exceptions
 from aiida.engine import ExitCode
-from aiida.orm import Dict
+from aiida.orm import Dict, StructureData
 from aiida.parsers.parser import Parser
 from aiida.plugins import CalculationFactory
-import tempfile
-from ase.io.elk import ElkReader
+import tempfile, os
+from ase.io.elk import ElkReader, read_elk
 
 ElkCalculation = CalculationFactory("elk")
 
@@ -58,7 +58,9 @@ class ElkParser(Parser):
             self.retrieved.base.repository.copy_tree(tmp_path)
             er = ElkReader(tmp_path)
             output_params = Dict(dict=er.read_everything())
+            optimized_structure = read_elk(os.path.join(tmp_path,'GEOMETRY.OUT'))
 
         self.out("output_parameters", output_params)
+        self.out("output_structure", StructureData(ase=optimized_structure))
 
         return ExitCode(0)

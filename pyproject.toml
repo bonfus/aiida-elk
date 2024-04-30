@@ -55,6 +55,9 @@ docs = [
 [project.entry-points."aiida.calculations"]
 "elk" = "aiida_elk.calculations:ElkCalculation"
 
+[project.entry-points."aiida.workflows"]
+"elk.base" = "aiida_elk.workflows.base:ElkBaseWorkChain"
+
 [project.entry-points."aiida.parsers"]
 "elk" = "aiida_elk.parsers:ElkParser"
 
